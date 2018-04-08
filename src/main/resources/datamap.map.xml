@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<data-map xmlns="http://cayenne.apache.org/schema/9/modelMap"
+	 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	 xsi:schemaLocation="http://cayenne.apache.org/schema/9/modelMap http://cayenne.apache.org/schema/9/modelMap.xsd"
+	 project-version="9">
+	<property name="defaultPackage" value="com.ade.open.api.server.persistent"/>
+	<db-entity name="T_OPEN_SECRET">
+		<db-attribute name="COMPANY_ID" type="INTEGER" length="9"/>
+		<db-attribute name="CTIME" type="TIMESTAMP" length="11"/>
+		<db-attribute name="CTOR" type="INTEGER" length="38"/>
+		<db-attribute name="ENABLE" type="INTEGER" length="1"/>
+		<db-attribute name="GLOBAL" type="INTEGER" length="1"/>
+		<db-attribute name="PUBLIC_ID" type="VARCHAR" isMandatory="true" length="20"/>
+		<db-attribute name="SECRET_ID" type="INTEGER" isPrimaryKey="true" isMandatory="true" length="9"/>
+		<db-attribute name="SECRET_VALUE" type="VARCHAR" length="200"/>
+		<db-attribute name="UTIME" type="TIMESTAMP" length="11"/>
+		<db-attribute name="UTOR" type="INTEGER" length="38"/>
+	</db-entity>
+	<db-entity name="T_OPEN_SECRET_SERVICE">
+		<db-attribute name="ID" type="INTEGER" isPrimaryKey="true" isMandatory="true" length="9"/>
+		<db-attribute name="SECRET_ID" type="INTEGER" length="9"/>
+		<db-attribute name="SERVICE_ID" type="INTEGER" length="9"/>
+	</db-entity>
+	<db-entity name="T_OPEN_SECRET_VM">
+		<db-attribute name="ID" type="INTEGER" isPrimaryKey="true" isMandatory="true" length="22"/>
+		<db-attribute name="INNER_CODE" type="VARCHAR" length="10"/>
+		<db-attribute name="SECRET_ID" type="INTEGER" length="22"/>
+	</db-entity>
+	<db-entity name="T_OPEN_SERVICE">
+		<db-attribute name="SERVICE_DESC" type="VARCHAR" length="300"/>
+		<db-attribute name="SERVICE_ID" type="INTEGER" isPrimaryKey="true" isMandatory="true" length="9"/>
+		<db-attribute name="SERVICE_NAME" type="VARCHAR" length="50"/>
+	</db-entity>
+	<db-entity name="T_OPEN_SERVICE_HIS">
+		<db-attribute name="GLOBAL" type="INTEGER" length="1"/>
+		<db-attribute name="ID" type="INTEGER" isPrimaryKey="true" isMandatory="true" length="9"/>
+		<db-attribute name="PUBLIC_ID" type="VARCHAR" length="20"/>
+		<db-attribute name="REQUEST_CONTEXT" type="CLOB"/>
+		<db-attribute name="REQUEST_IP" type="VARCHAR" length="15"/>
+		<db-attribute name="REQUEST_TIME" type="TIMESTAMP" isMandatory="true" length="11"/>
+		<db-attribute name="RESPONSE_CONTEXT" type="CLOB"/>
+		<db-attribute name="RESPONSE_TIME" type="TIMESTAMP" length="11"/>
+	</db-entity>
+	<obj-entity name="TOpenSecret" className="com.ade.open.api.server.persistent.TOpenSecret" dbEntityName="T_OPEN_SECRET">
+		<obj-attribute name="companyId" type="java.lang.Integer" db-attribute-path="COMPANY_ID"/>
+		<obj-attribute name="ctime" type="java.time.LocalDateTime" db-attribute-path="CTIME"/>
+		<obj-attribute name="ctor" type="java.lang.Integer" db-attribute-path="CTOR"/>
+		<obj-attribute name="enable" type="java.lang.Integer" db-attribute-path="ENABLE"/>
+		<obj-attribute name="global" type="java.lang.Integer" db-attribute-path="GLOBAL"/>
+		<obj-attribute name="publicId" type="java.lang.String" db-attribute-path="PUBLIC_ID"/>
+		<obj-attribute name="secretValue" type="java.lang.String" db-attribute-path="SECRET_VALUE"/>
+		<obj-attribute name="utime" type="java.time.LocalDateTime" db-attribute-path="UTIME"/>
+		<obj-attribute name="utor" type="java.lang.Integer" db-attribute-path="UTOR"/>
+	</obj-entity>
+	<obj-entity name="TOpenSecretService" className="com.ade.open.api.server.persistent.TOpenSecretService" dbEntityName="T_OPEN_SECRET_SERVICE">
+	</obj-entity>
+	<obj-entity name="TOpenSecretVm" className="com.ade.open.api.server.persistent.TOpenSecretVm" dbEntityName="T_OPEN_SECRET_VM">
+		<obj-attribute name="innerCode" type="java.lang.String" db-attribute-path="INNER_CODE"/>
+	</obj-entity>
+	<obj-entity name="TOpenService" className="com.ade.open.api.server.persistent.TOpenService" dbEntityName="T_OPEN_SERVICE">
+		<obj-attribute name="serviceDesc" type="java.lang.String" db-attribute-path="SERVICE_DESC"/>
+		<obj-attribute name="serviceName" type="java.lang.String" db-attribute-path="SERVICE_NAME"/>
+	</obj-entity>
+	<obj-entity name="TOpenServiceHis" className="com.ade.open.api.server.persistent.TOpenServiceHis" dbEntityName="T_OPEN_SERVICE_HIS">
+		<obj-attribute name="global" type="int" db-attribute-path="GLOBAL"/>
+		<obj-attribute name="publicId" type="java.lang.String" db-attribute-path="PUBLIC_ID"/>
+		<obj-attribute name="requestContext" type="java.lang.String" db-attribute-path="REQUEST_CONTEXT"/>
+		<obj-attribute name="requestIp" type="java.lang.String" db-attribute-path="REQUEST_IP"/>
+		<obj-attribute name="requestTime" type="java.time.LocalDateTime" db-attribute-path="REQUEST_TIME"/>
+		<obj-attribute name="responseContext" type="java.lang.String" db-attribute-path="RESPONSE_CONTEXT"/>
+		<obj-attribute name="responseTime" type="java.time.LocalDateTime" db-attribute-path="RESPONSE_TIME"/>
+	</obj-entity>
+	<db-relationship name="SecretService" source="T_OPEN_SECRET" target="T_OPEN_SECRET_SERVICE" toMany="true">
+		<db-attribute-pair source="SECRET_ID" target="SECRET_ID"/>
+	</db-relationship>
+	<db-relationship name="SecretVm" source="T_OPEN_SECRET" target="T_OPEN_SECRET_VM" toMany="true">
+		<db-attribute-pair source="SECRET_ID" target="SECRET_ID"/>
+	</db-relationship>
+	<db-relationship name="Secret" source="T_OPEN_SECRET_SERVICE" target="T_OPEN_SECRET" toMany="false">
+		<db-attribute-pair source="SECRET_ID" target="SECRET_ID"/>
+	</db-relationship>
+	<db-relationship name="Service" source="T_OPEN_SECRET_SERVICE" target="T_OPEN_SERVICE" toMany="false">
+		<db-attribute-pair source="SERVICE_ID" target="SERVICE_ID"/>
+	</db-relationship>
+	<db-relationship name="Secret" source="T_OPEN_SECRET_VM" target="T_OPEN_SECRET" toMany="false">
+		<db-attribute-pair source="SECRET_ID" target="SECRET_ID"/>
+	</db-relationship>
+	<db-relationship name="ServiceSecret" source="T_OPEN_SERVICE" target="T_OPEN_SECRET_SERVICE" toMany="true">
+		<db-attribute-pair source="SERVICE_ID" target="SERVICE_ID"/>
+	</db-relationship>
+	<obj-relationship name="secretService" source="TOpenSecret" target="TOpenSecretService" deleteRule="Deny" db-relationship-path="SecretService"/>
+	<obj-relationship name="secretVm" source="TOpenSecret" target="TOpenSecretVm" deleteRule="Deny" db-relationship-path="SecretVm"/>
+	<obj-relationship name="secret" source="TOpenSecretService" target="TOpenSecret" deleteRule="Nullify" db-relationship-path="Secret"/>
+	<obj-relationship name="service" source="TOpenSecretService" target="TOpenService" deleteRule="Nullify" db-relationship-path="Service"/>
+	<obj-relationship name="secret" source="TOpenSecretVm" target="TOpenSecret" deleteRule="Nullify" db-relationship-path="Secret"/>
+	<obj-relationship name="serviceSecret" source="TOpenService" target="TOpenSecretService" deleteRule="Deny" db-relationship-path="ServiceSecret"/>
+</data-map>
